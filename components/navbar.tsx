@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, ShoppingCart, Menu, X, ChevronDown, User } from 'lucide-react';
+import { Search, ShoppingCart, Menu, X, ChevronDown, LogIn } from 'lucide-react';
 import { useCart } from '@/components/use-cart';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { itemCount } = useCart();
+  const loginHref = "/login";
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
@@ -81,7 +82,7 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Right Side - Search, Cart, Account */}
+          {/* Right Side - Search, Cart, Login */}
           <div className="flex items-center gap-4">
             {/* Search Bar - Hidden on small screens */}
             <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 hover:bg-gray-200 transition-colors duration-200 focus-within:ring-2 focus-within:ring-blue-500">
@@ -106,12 +107,13 @@ export function Navbar() {
               ) : null}
             </Link>
 
-            {/* Account/User Icon */}
+            {/* Login Action */}
             <Link
-              href="/account"
-              className="p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 transform hover:scale-110"
+              href={loginHref}
+              className="hidden sm:inline-flex items-center gap-2 rounded-full border border-[#cad2bb] px-4 py-2 text-sm font-semibold text-[#263118] transition hover:bg-[#f5f8ef] hover:text-[#223013]"
             >
-              <User className="w-6 h-6" />
+              <LogIn className="h-4 w-4" />
+              Login
             </Link>
 
             {/* Mobile Menu Button */}
@@ -143,6 +145,13 @@ export function Navbar() {
 
             {/* Mobile Links */}
             <div className="space-y-2">
+              <Link
+                href={loginHref}
+                className="block rounded-md bg-[#2f3b1d] px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-[#243015]"
+                onClick={() => setIsOpen(false)}
+              >
+                Login
+              </Link>
               {navLinks.map((link) => (
                 <Link
                   key={link.href}

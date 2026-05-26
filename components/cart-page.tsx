@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Minus, Plus, ShieldCheck, ShoppingBag, Trash2, Truck } from "lucide-react";
 import { useCart } from "@/components/use-cart";
 import { formatPrice } from "@/lib/format-price";
@@ -10,6 +11,7 @@ import { productCatalog } from "@/lib/product-catalog";
 const protectPromiseFee = 19;
 
 export function CartPage() {
+  const router = useRouter();
   const { cartItems, subtotal, discountTotal, total, removeItem, updateQuantity, clearCart } = useCart();
 
   const detailedItems = cartItems
@@ -143,7 +145,7 @@ export function CartPage() {
                           <Minus className="h-4 w-4" />
                         </button>
                         <span className="min-w-12 text-center text-sm font-bold text-[#1d2711]">
-                          Qty {item.quantity}
+                           {item.quantity}
                         </span>
                         <button
                           type="button"
@@ -232,9 +234,10 @@ export function CartPage() {
 
                 <button
                   type="button"
+                  onClick={() => router.push("/checkout")}
                   className="inline-flex w-full items-center justify-center rounded-full bg-[#f4b400] px-6 py-4 text-sm font-black text-[#2b2100] transition hover:bg-[#e8aa00]"
                 >
-                  Place order
+                  Checkout
                 </button>
               </div>
             </div>
