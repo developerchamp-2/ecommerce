@@ -76,7 +76,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-[#dce5d0] bg-[linear-gradient(180deg,#fbfdf8_0%,#f2f7eb_100%)] text-[#223013]">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      <div className="mx-auto  px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-4 md:grid-cols-3">
           {featureItems.map((item) => {
             const Icon = item.icon;

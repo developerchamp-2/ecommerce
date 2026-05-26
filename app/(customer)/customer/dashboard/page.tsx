@@ -10,7 +10,7 @@ import data from './data.json'
 const CustomerDashboardPage = () => {
   return (
     <div className="min-h-screen bg-background px-4 pb-10 pt-6 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-8">
+      <div className="mx-auto space-y-8">
         <section className="rounded-3xl border border-border bg-card p-6 shadow-sm shadow-muted/5">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-2">

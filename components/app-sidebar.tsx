@@ -2,206 +2,122 @@
 
 import * as React from "react"
 
-import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
+import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
+import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon, Settings2Icon, CircleHelpIcon, SearchIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, CommandIcon } from "lucide-react"
+import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon, ShoppingBagIcon } from "lucide-react"
 
+// This is sample data.
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
+  teams: [
     {
-      title: "Dashboard",
-      url: "#",
-      icon: (
-        <LayoutDashboardIcon
+      name: "Acme Inc",
+      logo: (
+        <GalleryVerticalEndIcon
         />
       ),
+      plan: "Enterprise",
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: (
-        <ListIcon
+      name: "Acme Corp.",
+      logo: (
+        <AudioLinesIcon
         />
       ),
+      plan: "Startup",
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: (
-        <ChartBarIcon
+      name: "Evil Corp.",
+      logo: (
+        <TerminalIcon
         />
       ),
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: (
-        <FolderIcon
-        />
-      ),
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: (
-        <UsersIcon
-        />
-      ),
+      plan: "Free",
     },
   ],
-  navClouds: [
+  navMain: [
     {
-      title: "Capture",
+      title: "Order",
+      url: "#",
       icon: (
-        <CameraIcon
+        <BookOpenIcon
         />
       ),
       isActive: true,
-      url: "#",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
+          title: "Order",
           url: "#",
         },
       ],
     },
     {
-      title: "Proposal",
+      title: "Product",
+      url: "#",
       icon: (
-        <FileTextIcon
+        <ShoppingBagIcon
         />
       ),
-      url: "#",
+      isActive: true,
       items: [
         {
-          title: "Active Proposals",
+          title: "Products",
           url: "#",
         },
         {
-          title: "Archived",
+          title: "Add Product",
           url: "#",
         },
       ],
     },
     {
-      title: "Prompts",
+      title: "Category",
+      url: "#",
       icon: (
-        <FileTextIcon
+        <ShoppingBagIcon
         />
       ),
-      url: "#",
+      isActive: true,
       items: [
         {
-          title: "Active Proposals",
+          title: "Categories",
           url: "#",
         },
         {
-          title: "Archived",
+          title: "Add Category",
           url: "#",
         },
       ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: (
-        <CircleHelpIcon
-        />
-      ),
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: (
-        <SearchIcon
-        />
-      ),
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: (
-        <DatabaseIcon
-        />
-      ),
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: (
-        <FileChartColumnIcon
-        />
-      ),
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: (
-        <FileIcon
-        />
-      ),
     },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
-            >
-              <a href="#">
-                <CommandIcon className="size-5!" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   )
 }
