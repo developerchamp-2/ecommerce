@@ -1,199 +1,328 @@
-﻿import React from 'react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import Link from "next/link"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Globe, ShieldCheck, Sparkles, Package, Users } from 'lucide-react'
+  ArrowRightIcon,
+  CompassIcon,
+  HeartHandshakeIcon,
+  LeafIcon,
+  PackageIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  StoreIcon,
+  TruckIcon,
+} from "lucide-react"
 
-const page = () => {
+const principles = [
+  {
+    title: "Thoughtful curation",
+    description:
+      "We focus on products that feel useful, well-made, and easy to trust at a glance.",
+    icon: CompassIcon,
+  },
+  {
+    title: "Reliable delivery",
+    description:
+      "Shipping, updates, and returns should feel calm and predictable instead of stressful.",
+    icon: TruckIcon,
+  },
+  {
+    title: "Human support",
+    description:
+      "When customers need help, they should reach a team that responds with clarity and care.",
+    icon: HeartHandshakeIcon,
+  },
+]
+
+const highlights = [
+  { label: "Happy shoppers", value: "200k+" },
+  { label: "Average rating", value: "4.9/5" },
+  { label: "Cities served", value: "120+" },
+  { label: "Support coverage", value: "24/7" },
+]
+
+const promises = [
+  {
+    title: "Clear product information",
+    text: "So customers can compare quickly and buy with confidence.",
+    icon: StoreIcon,
+  },
+  {
+    title: "Secure checkout flow",
+    text: "Protected payments and a smoother path from cart to confirmation.",
+    icon: ShieldCheckIcon,
+  },
+  {
+    title: "Simple order management",
+    text: "Tracking, updates, and support that stay organized after purchase.",
+    icon: PackageIcon,
+  },
+  {
+    title: "Lower-friction returns",
+    text: "A friendlier process when something is not the right fit.",
+    icon: LeafIcon,
+  },
+]
+
+const timeline = [
+  {
+    step: "01",
+    title: "We started with a simple idea",
+    text: "Shopping online should feel polished, transparent, and easy for everyday buyers.",
+  },
+  {
+    step: "02",
+    title: "We built around trust first",
+    text: "That meant better product storytelling, calmer design, and dependable order updates.",
+  },
+  {
+    step: "03",
+    title: "We keep refining the experience",
+    text: "From browsing to delivery, every detail is shaped to reduce confusion and save time.",
+  },
+]
+
+export default function Page() {
   return (
-    <div className="bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.16),_transparent_15%),radial-gradient(circle_at_bottom_right,_rgba(34,197,94,0.12),_transparent_18%)] text-foreground">
-      <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <section className="grid gap-12 rounded-[2.5rem] bg-gradient-to-br from-slate-950/95 via-slate-900/85 to-slate-950/95 p-12 shadow-[0_40px_120px_-45px_rgba(15,23,42,0.9)] ring-1 ring-slate-800/70 lg:grid-cols-[1.05fr_0.8fr] lg:items-center">
-          <div className="space-y-6">
-            <Badge className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
-              About ShopHub
-            </Badge>
-            <div className="space-y-4">
-              <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-                A modern ecommerce platform made to help brands scale faster.
-              </h1>
-              <p className="max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
-                ShopHub helps merchants launch, manage, and grow their online business from one unified dashboard. We build tools for better conversions, stronger operations, and long-term customer loyalty.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Button className="min-w-[12rem] bg-gradient-to-r from-primary to-cyan-500 text-white shadow-lg shadow-cyan-500/20 hover:from-cyan-500 hover:to-sky-500">
-                Explore the platform
-              </Button>
-              <Button variant="secondary" className="min-w-[12rem] border-white/10 bg-white/10 text-white shadow-sm shadow-slate-900/10 hover:bg-white/20">
-                Talk to a specialist
-              </Button>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Stat accent="blue" value="200k+" label="Active customers" />
-              <Stat accent="orange" value="4.9/5" label="Merchant rating" />
-              <Stat accent="green" value="98%" label="Support satisfaction" />
-              <Stat accent="teal" value="24/7" label="Commerce support" />
-            </div>
-          </div>
-
-          <Card className="rounded-[2rem] border border-transparent bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-8 text-white shadow-xl shadow-slate-950/20 ring-1 ring-slate-700/40">
-            <CardHeader>
-              <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-cyan-400/15 text-cyan-300 shadow-cyan-400/20">
-                <Sparkles className="size-5" />
-              </div>
-              <CardTitle className="mt-6 text-2xl text-white">Our vision for commerce</CardTitle>
-              <CardDescription className="mt-2 text-slate-300">
-                Build faster, sell smarter, and delight customers with a platform designed to support every brand journey.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="mt-6 space-y-5 text-sm leading-7 text-slate-300">
-              <p>
-                ShopHub modernizes commerce by giving teams a beautiful storefront, powerful marketing tools, and simple operations in one place.
-              </p>
-              <p>
-                We believe every merchant should enjoy fast time to launch, a reliable growth engine, and a customer experience that feels polished and effortless.
-              </p>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="mt-16 space-y-8">
-          <div className="space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-              Built for growth
-            </p>
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Everything merchants need to run a modern online business.
-            </h2>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            <FeatureCard
-              accent="blue"
-              icon={Globe}
-              title="Global storefronts"
-              description="Launch responsive product experiences that adapt to every device and region with built-in localization support."
-            />
-            <FeatureCard
-              accent="orange"
-              icon={ShieldCheck}
-              title="Secure checkout"
-              description="Deliver fast, PCI-ready checkout flows with fraud protection and trust signals that increase conversions."
-            />
-            <FeatureCard
-              accent="green"
-              icon={Package}
-              title="Smart operations"
-              description="Streamline inventory, orders, and fulfillment so you can focus on growth instead of manual processes."
-            />
-          </div>
-        </section>
-
-        <section className="mt-16 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div className="space-y-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-              What we stand for
-            </p>
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              A thoughtful platform experience built for teams and customers.
-            </h2>
-            <p className="max-w-xl text-base leading-8 text-muted-foreground sm:text-lg">
-              We focus on speed, clarity, and reliability so your ecommerce business can move faster, reduce friction, and keep customers coming back.
-            </p>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <PillarCard
-                accent="blue"
-                title="Fast time to value"
-                description="Launch your storefront and promotions in hours, not weeks."
-              />
-              <PillarCard
-                accent="orange"
-                title="Consistent experience"
-                description="Keep product discovery and checkout seamless across every channel."
-              />
-              <PillarCard
-                accent="green"
-                title="Flexible operations"
-                description="Manage orders, inventory, and shipping from a single modern workspace."
-              />
-              <PillarCard
-                accent="teal"
-                title="Trusted support"
-                description="Access expert commerce help whenever you need it, 24/7."
-              />
-            </div>
-          </div>
-
-          <Card className="rounded-[2rem] border border-transparent bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 p-8 text-white shadow-xl shadow-cyan-500/10 ring-1 ring-cyan-400/20">
-            <CardHeader>
-              <CardTitle className="text-white">Trusted by growing brands</CardTitle>
-              <CardDescription className="text-slate-300">Built to support teams from boutique shops to large catalogs.</CardDescription>
-            </CardHeader>
-            <CardContent className="mt-6 space-y-4 text-sm leading-7 text-slate-300">
-              <p>
-                ShopHub combines a polished storefront with commerce tools designed for modern operations, letting teams focus on what matters most — selling more and delighting customers.
-              </p>
-              <div className="grid gap-3 text-sm text-slate-200 sm:grid-cols-2">
-                <div className="rounded-3xl border border-white/10 bg-slate-950/60 p-5 shadow-sm shadow-slate-950/20">
-                  <p className="font-semibold text-white">99.9%</p>
-                  <p className="text-slate-300">Average platform uptime.</p>
-                </div>
-                <div className="rounded-3xl border border-white/10 bg-slate-950/60 p-5 shadow-sm shadow-slate-950/20">
-                  <p className="font-semibold text-white">1,200+</p>
-                  <p className="text-slate-300">Integrations available out of the box.</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="mt-16 rounded-[2rem] border border-border bg-card p-8 shadow-sm shadow-muted/10 ring-1 ring-border">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div className="space-y-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-                ShopHub stories
-              </p>
-              <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                Merchants choose ShopHub for speed, simplicity, and support.
-              </h2>
-              <p className="max-w-xl text-base leading-8 text-muted-foreground sm:text-lg">
-                Our customers move faster with a platform that makes it easy to run campaigns, manage inventory, and deliver a premium brand experience.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <TestimonialCard />
-              <div className="rounded-3xl border border-border bg-background p-6 text-sm leading-7 text-muted-foreground">
-                “ShopHub helped us streamline our store operations, and our buyers love the fresh storefront experience. Our conversion rate improved in the first month.”
-                <p className="mt-4 font-semibold text-foreground">Mia Johnson</p>
-                <p className="text-sm text-muted-foreground">Co-founder, Bloom & Co.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-16 rounded-[2rem] bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-500 p-8 shadow-2xl shadow-cyan-500/20 ring-1 ring-cyan-300/30">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <div className="bg-[radial-gradient(circle_at_top_left,rgba(214,239,192,0.7),transparent_24%),radial-gradient(circle_at_top_right,rgba(191,219,254,0.7),transparent_20%),linear-gradient(180deg,#fcfdf9_0%,#f4f8ee_44%,#fbfcf8_100%)]">
+      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <section className="relative overflow-hidden rounded-[2.5rem] border border-white/70 bg-white/65 p-6 shadow-[0_35px_100px_-50px_rgba(35,45,24,0.45)] backdrop-blur-2xl md:p-8 xl:p-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(96,165,250,0.14),transparent_20%),radial-gradient(circle_at_bottom_left,rgba(163,230,53,0.16),transparent_24%)]" />
+          <div className="relative grid gap-10 xl:grid-cols-[1.15fr_0.85fr] xl:items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/80">
-                Ready to get started?
+              <Badge className="rounded-full border border-[#dce8ca] bg-[#f6fbef] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#556544] hover:bg-[#f6fbef]">
+                About ShopHub
+              </Badge>
+              <h1 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-[#16200d] sm:text-5xl lg:text-6xl">
+                We make online shopping feel cleaner, warmer, and easier to trust.
+              </h1>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-[#627054] sm:text-lg">
+                ShopHub is built for people who want a smoother way to browse,
+                compare, and buy. We care about clear information, thoughtful
+                presentation, and support that actually feels helpful.
               </p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                Launch your next chapter in ecommerce.
-              </h2>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button
+                  asChild
+                  className="rounded-full bg-[#2f3b1d] px-6 text-white hover:bg-[#243015]"
+                >
+                  <Link href="/products">
+                    Explore products
+                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full border-[#d3dfc5] bg-white/75 px-6 text-[#223013] hover:bg-[#f4f8ee]"
+                >
+                  <Link href="/contact">Talk to our team</Link>
+                </Button>
+              </div>
+
+              <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                {highlights.map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-[1.6rem] border border-white/70 bg-white/70 p-4 shadow-[0_20px_50px_-38px_rgba(35,45,24,0.45)] backdrop-blur"
+                  >
+                    <p className="text-2xl font-semibold text-[#17210e]">
+                      {item.value}
+                    </p>
+                    <p className="mt-1 text-sm text-[#6a775e]">{item.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            <div className="grid gap-4">
+              <div className="rounded-[2rem] border border-white/75 bg-[linear-gradient(145deg,rgba(255,255,255,0.88),rgba(242,247,235,0.8))] p-6 shadow-[0_24px_60px_-40px_rgba(35,45,24,0.4)] backdrop-blur-xl">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-[#eef5e5] text-[#3a5d19]">
+                  <SparklesIcon className="size-5" />
+                </div>
+                <h2 className="mt-5 text-2xl font-semibold text-[#16200d]">
+                  A simpler standard for modern commerce
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-[#66725b]">
+                  We are not trying to add noise. We are trying to remove it,
+                  so product discovery, checkout, and post-purchase updates all
+                  feel more natural.
+                </p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[1.8rem] border border-[#deead3] bg-[#f9fbf5] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7b886d]">
+                    Our focus
+                  </p>
+                  <p className="mt-3 text-lg font-semibold text-[#1b2811]">
+                    Practical shopping experiences that feel premium without
+                    being complicated.
+                  </p>
+                </div>
+                <div className="rounded-[1.8rem] border border-[#dbe6f2] bg-[#f7fbff] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6b7b8f]">
+                    Our promise
+                  </p>
+                  <p className="mt-3 text-lg font-semibold text-[#1b2811]">
+                    Every interaction should be easier to understand than the
+                    one before it.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-16 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div className="rounded-[2rem] border border-[#e0e9d6] bg-white/70 p-6 shadow-[0_24px_70px_-45px_rgba(35,45,24,0.35)] backdrop-blur">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#738160]">
+              Why we exist
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#16200d] sm:text-4xl">
+              Better commerce starts with better clarity.
+            </h2>
+            <p className="mt-4 text-base leading-8 text-[#66725b]">
+              We believe design should help people move forward, not slow them
+              down. That applies to product pages, checkout steps, order
+              tracking, and support conversations.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {principles.map((item) => {
+              const Icon = item.icon
+
+              return (
+                <div
+                  key={item.title}
+                  className="rounded-[2rem] border border-white/70 bg-white/68 p-6 shadow-[0_20px_60px_-44px_rgba(35,45,24,0.45)] backdrop-blur"
+                >
+                  <div className="flex size-11 items-center justify-center rounded-2xl bg-[#eef5e5] text-[#35591b]">
+                    <Icon className="size-5" />
+                  </div>
+                  <h3 className="mt-5 text-xl font-semibold text-[#18230f]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[#677359]">
+                    {item.description}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        <section className="mt-16 rounded-[2.25rem] border border-white/75 bg-white/65 p-6 shadow-[0_28px_80px_-46px_rgba(35,45,24,0.38)] backdrop-blur-2xl md:p-8">
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#738160]">
+                What customers can expect
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#16200d] sm:text-4xl">
+                A shopping journey that stays useful at every step.
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-8 text-[#66725b]">
+                From the first product click to the final delivery update, we
+                keep the experience steady, transparent, and easy to follow.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {promises.map((item) => {
+                const Icon = item.icon
+
+                return (
+                  <div
+                    key={item.title}
+                    className="rounded-[1.8rem] border border-[#e2e9d9] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(247,250,242,0.82))] p-5"
+                  >
+                    <div className="flex size-10 items-center justify-center rounded-2xl bg-[#f0f5ea] text-[#415532]">
+                      <Icon className="size-4.5" />
+                    </div>
+                    <h3 className="mt-4 text-lg font-semibold text-[#1a2510]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-7 text-[#66725b]">
+                      {item.text}
+                    </p>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-16 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-[2.1rem] border border-[#dae4cf] bg-[#f9fbf6] p-6 shadow-[0_22px_60px_-44px_rgba(35,45,24,0.3)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#738160]">
+              Our story
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#16200d] sm:text-4xl">
+              We are building a calmer way to shop online.
+            </h2>
+            <p className="mt-4 text-base leading-8 text-[#66725b]">
+              ShopHub grew from a simple observation: too many storefronts ask
+              customers to work too hard. We wanted a softer, more reliable
+              experience that still feels elevated.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {timeline.map((item) => (
+              <div
+                key={item.step}
+                className="rounded-[2rem] border border-white/75 bg-white/72 p-6 shadow-[0_20px_55px_-42px_rgba(35,45,24,0.35)] backdrop-blur"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#eef5e5] text-sm font-semibold text-[#31411f]">
+                    {item.step}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-[#18230f]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-7 text-[#66725b]">
+                      {item.text}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16 rounded-[2.4rem] border border-[#d8e2cc] bg-[linear-gradient(135deg,#273319_0%,#3f5226_45%,#6e8d35_100%)] p-8 shadow-[0_30px_90px_-50px_rgba(35,45,24,0.65)]">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#d9e7c5]">
+                Ready to explore?
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                Discover a storefront designed to feel easier from the first
+                click.
+              </h2>
+              <p className="mt-4 text-base leading-8 text-[#ecf3e0]/80">
+                Browse products, check categories, or reach out to our team if
+                you want help finding the right fit.
+              </p>
+            </div>
+
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button className="min-w-[10rem] bg-white text-slate-950 shadow-lg shadow-slate-950/10 hover:bg-slate-100">
-                Start your free trial
+              <Button
+                asChild
+                className="rounded-full bg-white px-6 text-[#223013] hover:bg-[#f4f8ee]"
+              >
+                <Link href="/categories">Browse categories</Link>
               </Button>
-              <Button variant="secondary" className="min-w-[10rem] border-white/30 bg-white/10 text-white hover:bg-white/20">
-                Talk to sales
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border-white/30 bg-white/10 px-6 text-white hover:bg-white/18"
+              >
+                <Link href="/contact">Contact support</Link>
               </Button>
             </div>
           </div>
@@ -202,87 +331,3 @@ const page = () => {
     </div>
   )
 }
-
-function Stat({ accent, value, label }: { accent: 'blue' | 'orange' | 'green' | 'teal'; value: string; label: string }) {
-  const accentClass = {
-    blue: 'from-sky-500/20 via-sky-500/10 to-slate-950/10 border-sky-400/20',
-    orange: 'from-orange-500/20 via-orange-500/10 to-slate-950/10 border-orange-400/20',
-    green: 'from-emerald-500/20 via-emerald-500/10 to-slate-950/10 border-emerald-400/20',
-    teal: 'from-cyan-500/20 via-cyan-500/10 to-slate-950/10 border-cyan-400/20',
-  }[accent]
-
-  return (
-    <div className={`rounded-3xl border p-6 text-center backdrop-blur-sm ${accentClass}`}>
-      <p className="text-3xl font-semibold tracking-tight text-white">{value}</p>
-      <p className="mt-2 text-sm text-slate-200">{label}</p>
-    </div>
-  )
-}
-
-function FeatureCard({
-  accent,
-  icon: Icon,
-  title,
-  description,
-}: {
-  accent: 'blue' | 'orange' | 'green'
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
-  title: string
-  description: string
-}) {
-  const accentClass = {
-    blue: 'from-blue-600/90 via-sky-600/80 to-cyan-500/90 text-white shadow-blue-500/20',
-    orange: 'from-orange-500/95 via-amber-500/80 to-yellow-400/95 text-slate-950 shadow-orange-500/20',
-    green: 'from-emerald-600/95 via-emerald-500/80 to-teal-500/95 text-white shadow-emerald-500/20',
-  }[accent]
-
-  return (
-    <Card className={`rounded-[1.75rem] border border-white/10 bg-gradient-to-br p-6 shadow-2xl ${accentClass}`}>
-      <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-white/10 text-white shadow-sm shadow-white/10">
-        <Icon className="size-5" />
-      </div>
-      <h3 className="mt-6 text-xl font-semibold">{title}</h3>
-      <p className="mt-3 text-sm leading-7 text-current/80">{description}</p>
-    </Card>
-  )
-}
-
-function PillarCard({
-  accent,
-  title,
-  description,
-}: {
-  accent: 'blue' | 'orange' | 'green' | 'teal'
-  title: string
-  description: string
-}) {
-  const accentClass = {
-    blue: 'from-sky-950/95 via-sky-800/90 to-slate-950/90 border-sky-400/20 text-white',
-    orange: 'from-orange-950/95 via-orange-800/90 to-slate-950/90 border-orange-400/20 text-white',
-    green: 'from-emerald-950/95 via-emerald-800/90 to-slate-950/90 border-emerald-400/20 text-white',
-    teal: 'from-cyan-950/95 via-cyan-800/90 to-slate-950/90 border-cyan-400/20 text-white',
-  }[accent]
-
-  return (
-    <div className={`rounded-3xl border p-6 shadow-lg shadow-slate-950/20 bg-gradient-to-br ${accentClass}`}>
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-3 text-sm leading-7 text-slate-200">{description}</p>
-    </div>
-  )
-}
-
-function TestimonialCard() {
-  return (
-    <Card className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-sky-950 via-cyan-950 to-emerald-950 p-8 shadow-xl shadow-cyan-500/10 text-white">
-      <CardHeader>
-        <CardTitle className="text-white">Fast time to launch</CardTitle>
-        <CardDescription className="text-slate-200">Our design-first experience helps merchants launch quickly.</CardDescription>
-      </CardHeader>
-      <CardContent className="mt-4 text-sm leading-7 text-slate-200">
-        Build product pages, launch campaigns, and manage your storefront from a single dashboard with no compromise on reliability.
-      </CardContent>
-    </Card>
-  )
-}
-
-export default page
