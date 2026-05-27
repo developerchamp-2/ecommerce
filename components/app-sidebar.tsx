@@ -14,6 +14,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon, ShoppingBagIcon, ChartBarBigIcon } from "lucide-react"
+// use lucide icons for consistent sizing
+import { NavSecondary } from "./nav-secondary"
 
 // This is sample data.
 const data = {
@@ -103,6 +105,14 @@ const data = {
       ],
     },
   ],
+  navSecondary: [
+    {
+      title: "Configuration",
+      url: "/admin/configuration",
+      icon: <Settings2Icon />,
+    },
+  ],
+
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -113,6 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
+        <NavSecondary items={data.navSecondary} className="" />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
