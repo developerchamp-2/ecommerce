@@ -1,6 +1,6 @@
-import { HeroCarousel } from "@/components/hero-carousel";
-import { CategoryGrid } from "@/components/category-grid";
-import { HomeMerchStrips } from "@/components/home-merch-strips";
+import { HeroCarousel } from "@/components/hero-carousel"
+import { CategoryGrid } from "@/components/category-grid"
+import { HomeMerchStrips } from "@/components/home-merch-strips"
 
 export default function Page() {
   return (
@@ -12,5 +12,5 @@ export default function Page() {
         intro="A cleaner category section with faster visual scanning, strong product cues, and direct paths into focused category pages."
       />
     </>
-  );
+  )
 }
