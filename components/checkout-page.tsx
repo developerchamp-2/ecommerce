@@ -2,25 +2,29 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { CreditCard, Landmark, ShieldCheck, ShoppingBag, Smartphone, Truck } from "lucide-react";
+import { CreditCard, Landmark, PackageCheck, ShieldCheck, ShoppingBag, Smartphone, Sparkles, Truck } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/components/use-cart";
 import { formatPrice } from "@/lib/format-price";
-import { productCatalog } from "@/lib/product-catalog";
+import type { AuthUser } from "@/lib/auth-types";
+import { GuestAccessPrompt } from "@/components/guest-access-prompt";
+import {
+  createOrderFromCheckout,
+  saveStoredOrder,
+  type CheckoutAddress,
+  type StoredOrder,
+} from "@/lib/order-storage";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const protectPromiseFee = 19;
 
-type AddressFields = {
-  fullName: string;
-  phone: string;
-  email: string;
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-};
+type AddressFields = CheckoutAddress;
 
 const emptyAddress: AddressFields = {
   fullName: "",
@@ -88,16 +92,34 @@ function Field({
   );
 }
 
-export function CheckoutPage() {
-  const { cartItems, subtotal, discountTotal, total } = useCart();
-  const [shippingAddress, setShippingAddress] = useState<AddressFields>(emptyAddress);
-  const [billingAddress, setBillingAddress] = useState<AddressFields>(emptyAddress);
+export function CheckoutPage({ user }: { user?: AuthUser }) {
+  const { cartItems, subtotal, discountTotal, total, clearCart } = useCart();
+  const [shippingAddress, setShippingAddress] = useState<AddressFields>(() =>
+    user
+      ? {
+          ...emptyAddress,
+          fullName: user.name,
+          email: user.email,
+        }
+      : emptyAddress
+  );
+  const [billingAddress, setBillingAddress] = useState<AddressFields>(() =>
+    user
+      ? {
+          ...emptyAddress,
+          fullName: user.name,
+          email: user.email,
+        }
+      : emptyAddress
+  );
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<(typeof paymentOptions)[number]["value"]>("card");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [placedOrder, setPlacedOrder] = useState<StoredOrder | null>(null);
 
   const detailedItems = cartItems
     .map((item) => {
-      const product = productCatalog.find((entry) => entry.id === item.productId);
+      const product = item.product;
       if (!product) {
         return null;
       }
@@ -123,6 +145,108 @@ export function CheckoutPage() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!user || isSubmitting || detailedItems.length === 0) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const order = createOrderFromCheckout({
+        cartItems,
+        subtotal,
+        discountTotal,
+        serviceFee,
+        total: orderTotal,
+        shippingAddress,
+        billingAddress: billingSameAsShipping ? shippingAddress : billingAddress,
+        paymentMethod,
+        user,
+      });
+
+      saveStoredOrder(order);
+      clearCart();
+      setPlacedOrder(order);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[linear-gradient(180deg,_#f7faf3_0%,_#ffffff_45%,_#f4f7ef_100%)] px-4 py-10 sm:px-6 lg:px-8">
+        <GuestAccessPrompt
+          title="Sign in to complete checkout"
+          description="Your cart is saved already. Sign in or create an account to place the order, keep your history, and view it in Orders."
+          primaryLabel="Log in to checkout"
+          secondaryLabel="Create account"
+          primaryHref="/login?mode=login&redirect=/checkout"
+          secondaryHref="/login?mode=signup&redirect=/checkout"
+        />
+      </div>
+    );
+  }
+
+  if (placedOrder) {
+    return (
+      <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(180deg,_#eef6ea_0%,_#ffffff_48%,_#f5f8ef_100%)] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(63,94,37,0.12),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(244,180,0,0.14),_transparent_34%)]" />
+
+        <Dialog open>
+          <DialogContent showCloseButton={false} className="border-[#dce5d0] bg-white/96 backdrop-blur-sm">
+            <div className="relative overflow-hidden rounded-[2rem]">
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(238,244,229,0.95)_0%,_rgba(255,255,255,0.98)_45%,_rgba(248,250,244,0.96)_100%)]" />
+              <div className="relative p-6 sm:p-8">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#eef4e5] text-[#30411a] shadow-[0_18px_40px_-28px_rgba(48,65,26,0.45)]">
+                  <PackageCheck className="h-8 w-8" />
+                </div>
+
+                <div className="mt-5 text-center">
+                  <p className="inline-flex items-center gap-2 rounded-full bg-[#f6f9f1] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#71805b]">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Order confirmed
+                  </p>
+                  <DialogHeader className="mt-4 p-0 text-center">
+                    <DialogTitle>Your order is placed</DialogTitle>
+                    <DialogDescription className="mx-auto mt-3 max-w-md text-base leading-7 text-[#5d6750]">
+                      Thank you for shopping with ShopHub. Your order has been saved, your cart is empty, and we&apos;ll
+                      keep the details in your account history.
+                    </DialogDescription>
+                  </DialogHeader>
+                </div>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <SummaryPill label="Order ID" value={placedOrder.id} />
+                  <SummaryPill label="Payment" value={getPaymentMethodLabel(placedOrder.paymentMethod)} />
+                  <SummaryPill label="Total paid" value={formatPrice(placedOrder.total)} />
+                  <SummaryPill label="Status" value={placedOrder.status} />
+                </div>
+
+                <div className="mt-6 rounded-[1.6rem] border border-dashed border-[#dfe6d2] bg-[#f7f9f4] p-4 text-sm leading-7 text-[#556048]">
+                  You can return to the home page now, or later check this order in your account orders page.
+                </div>
+
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="/"
+                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#f4b400] px-6 py-3.5 text-sm font-black text-[#2b2100] transition hover:bg-[#e8aa00]"
+                  >
+                    Go to Home
+                  </Link>
+                  <Link
+                    href="/account/orders"
+                    className="inline-flex flex-1 items-center justify-center rounded-full border border-[#cad2bb] px-6 py-3.5 text-sm font-semibold text-[#263118] transition hover:bg-[#f5f8ef]"
+                  >
+                    View orders
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
   }
 
   if (detailedItems.length === 0) {
@@ -354,9 +478,10 @@ export function CheckoutPage() {
 
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="inline-flex w-full items-center justify-center rounded-full bg-[#f4b400] px-6 py-4 text-sm font-black text-[#2b2100] transition hover:bg-[#e8aa00]"
                 >
-                  Confirm order
+                  {isSubmitting ? "Placing order..." : "Confirm order"}
                 </button>
 
               </div>
@@ -366,4 +491,23 @@ export function CheckoutPage() {
       </div>
     </div>
   );
+}
+
+function SummaryPill({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[1.4rem] border border-[#e4ead8] bg-white px-4 py-3">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#758463]">{label}</p>
+      <p className="mt-2 break-all text-sm font-bold text-[#1b2511]">{value}</p>
+    </div>
+  );
+}
+
+function getPaymentMethodLabel(paymentMethod: StoredOrder["paymentMethod"]) {
+  return paymentMethod === "card"
+    ? "Credit / Debit Card"
+    : paymentMethod === "upi"
+      ? "UPI / Instant Pay"
+      : paymentMethod === "bank"
+        ? "Net Banking"
+        : "Cash on Delivery";
 }
