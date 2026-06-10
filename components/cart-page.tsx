@@ -44,7 +44,7 @@ type CartTableRow = {
 
 export function CartPage({ isAuthenticated }: { isAuthenticated: boolean }) {
   const router = useRouter();
-  const { cartItems, removeItem, updateQuantity, clearCart } = useCart();
+  const { cartItems, itemCount, subtotal, discountTotal, total, removeItem, updateQuantity, clearCart } = useCart();
 
   const detailedItems = React.useMemo<DetailedCartItem[]>(
     () =>
@@ -215,6 +215,32 @@ export function CartPage({ isAuthenticated }: { isAuthenticated: boolean }) {
     [removeItem, updateQuantity]
   );
 
+  const summaryStats = React.useMemo(
+    () => [
+      {
+        label: "Units in cart",
+        value: itemCount,
+        hint: `${detailedItems.length} product${detailedItems.length === 1 ? "" : "s"}`,
+      },
+      {
+        label: "Original subtotal",
+        value: subtotal,
+        hint: "Before discounts",
+      },
+      {
+        label: "Savings",
+        value: discountTotal,
+        hint: "Applied from sale pricing",
+      },
+      {
+        label: "Estimated total",
+        value: total,
+        hint: "Before shipping and tax",
+      },
+    ],
+    [discountTotal, detailedItems.length, itemCount, subtotal, total]
+  );
+
   const checkoutHref = isAuthenticated ? "/checkout" : "/login?mode=login&redirect=/checkout";
 
   if (detailedItems.length === 0) {
@@ -284,7 +310,7 @@ export function CartPage({ isAuthenticated }: { isAuthenticated: boolean }) {
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
           <DataTable
             data={cartRows}
             columns={cartColumns}
@@ -294,7 +320,66 @@ export function CartPage({ isAuthenticated }: { isAuthenticated: boolean }) {
             searchPlaceholder="Search cart items..."
             emptyMessage="No cart items found."
             columnVisibilityLabel="Show columns"
+            enablePagination={false}
           />
+
+          <aside className="lg:sticky lg:top-24 lg:h-fit">
+            <section className="rounded-[28px] border border-[#dde4d1] bg-white p-5 shadow-[0_24px_70px_-52px_rgba(31,41,18,0.24)] sm:p-6">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#71805b]">Cart summary</p>
+              <h2 className="mt-2 text-2xl font-black tracking-tight text-[#14190e]">
+                {itemCount} item{itemCount === 1 ? "" : "s"} ready
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-[#5d6750]">
+                A quick breakdown of what you&apos;ll pay next, with savings already applied.
+              </p>
+
+              <div className="mt-6 grid gap-3">
+                {summaryStats.map((stat) => (
+                  <div key={stat.label} className="rounded-[1.4rem] bg-[#fafcf8] p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-sm font-semibold text-[#5d6750]">{stat.label}</span>
+                      <span
+                        className={`text-right text-lg font-black tracking-tight ${
+                          stat.label === "Savings" ? "text-[#2f8f4e]" : "text-[#11160c]"
+                        }`}
+                      >
+                        {formatPrice(stat.value)}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs leading-5 text-[#7b846f]">{stat.hint}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 rounded-[1.6rem] border border-dashed border-[#dfe6d2] bg-[#f7f9f4] p-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-[#33401f]">What happens next</p>
+                    <p className="mt-1 text-sm leading-6 text-[#5d6750]">
+                      Continue to checkout to enter delivery details, choose payment, and place the order.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row lg:flex-col">
+                  <button
+                    type="button"
+                    onClick={() => router.push(checkoutHref)}
+                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#f4b400] px-5 py-3 text-sm font-black text-[#2b2100] transition hover:bg-[#e8aa00]"
+                  >
+                    {isAuthenticated ? "Checkout now" : "Log in to checkout"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={clearCart}
+                    className="inline-flex flex-1 items-center justify-center rounded-full border border-[#cad2bb] px-5 py-3 text-sm font-semibold text-[#263118] transition hover:bg-[#f5f8ef]"
+                  >
+                    Clear cart
+                  </button>
+                </div>
+              </div>
+            </section>
+          </aside>
         </div>
       </div>
     </div>

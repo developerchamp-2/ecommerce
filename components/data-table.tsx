@@ -54,6 +54,7 @@ type DataTableProps<TData, TValue> = {
   searchPlaceholder?: string
   emptyMessage?: string
   columnVisibilityLabel?: string
+  enablePagination?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -66,6 +67,7 @@ export function DataTable<TData, TValue>({
   searchPlaceholder = "Search records...",
   emptyMessage = "No results found.",
   columnVisibilityLabel = "Columns",
+  enablePagination = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -85,7 +87,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    ...(enablePagination ? { getPaginationRowModel: getPaginationRowModel() } : {}),
   })
 
   const searchColumn = searchKey ? table.getColumn(searchKey) : null
@@ -208,53 +210,55 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-white/35 px-5 py-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-        <p>
-          Showing {table.getRowModel().rows.length} of {data.length} record(s)
-        </p>
+      {enablePagination ? (
+        <div className="flex flex-col gap-3 border-t border-white/35 px-5 py-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            Showing {table.getRowModel().rows.length} of {data.length} record(s)
+          </p>
 
-        <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ChevronsLeftIcon />
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ChevronLeftIcon />
-          </Button>
-          <span className="min-w-24 text-center font-medium text-slate-700">
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount() || 1}
-          </span>
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <ChevronRightIcon />
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            onClick={() => table.setPageIndex(Math.max(table.getPageCount() - 1, 0))}
-            disabled={!table.getCanNextPage()}
-          >
-            <ChevronsRightIcon />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronsLeftIcon />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeftIcon />
+            </Button>
+            <span className="min-w-24 text-center font-medium text-slate-700">
+              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount() || 1}
+            </span>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRightIcon />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={() => table.setPageIndex(Math.max(table.getPageCount() - 1, 0))}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronsRightIcon />
+            </Button>
+          </div>
         </div>
-      </div>
+      ) : null}
     </section>
   )
 }

@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { CreditCard, Landmark, ShieldCheck, ShoppingBag, Smartphone, Truck } from "lucide-react";
+import { CreditCard, Landmark, PackageCheck, ShieldCheck, ShoppingBag, Smartphone, Sparkles, Truck } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/components/use-cart";
 import { formatPrice } from "@/lib/format-price";
@@ -13,7 +12,15 @@ import {
   createOrderFromCheckout,
   saveStoredOrder,
   type CheckoutAddress,
+  type StoredOrder,
 } from "@/lib/order-storage";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const protectPromiseFee = 19;
 
@@ -86,7 +93,6 @@ function Field({
 }
 
 export function CheckoutPage({ user }: { user?: AuthUser }) {
-  const router = useRouter();
   const { cartItems, subtotal, discountTotal, total, clearCart } = useCart();
   const [shippingAddress, setShippingAddress] = useState<AddressFields>(() =>
     user
@@ -109,6 +115,7 @@ export function CheckoutPage({ user }: { user?: AuthUser }) {
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<(typeof paymentOptions)[number]["value"]>("card");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [placedOrder, setPlacedOrder] = useState<StoredOrder | null>(null);
 
   const detailedItems = cartItems
     .map((item) => {
@@ -160,7 +167,7 @@ export function CheckoutPage({ user }: { user?: AuthUser }) {
 
       saveStoredOrder(order);
       clearCart();
-      router.push("/account/orders?placed=1");
+      setPlacedOrder(order);
     } finally {
       setIsSubmitting(false);
     }
@@ -177,6 +184,67 @@ export function CheckoutPage({ user }: { user?: AuthUser }) {
           primaryHref="/login?mode=login&redirect=/checkout"
           secondaryHref="/login?mode=signup&redirect=/checkout"
         />
+      </div>
+    );
+  }
+
+  if (placedOrder) {
+    return (
+      <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(180deg,_#eef6ea_0%,_#ffffff_48%,_#f5f8ef_100%)] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(63,94,37,0.12),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(244,180,0,0.14),_transparent_34%)]" />
+
+        <Dialog open>
+          <DialogContent showCloseButton={false} className="border-[#dce5d0] bg-white/96 backdrop-blur-sm">
+            <div className="relative overflow-hidden rounded-[2rem]">
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(238,244,229,0.95)_0%,_rgba(255,255,255,0.98)_45%,_rgba(248,250,244,0.96)_100%)]" />
+              <div className="relative p-6 sm:p-8">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#eef4e5] text-[#30411a] shadow-[0_18px_40px_-28px_rgba(48,65,26,0.45)]">
+                  <PackageCheck className="h-8 w-8" />
+                </div>
+
+                <div className="mt-5 text-center">
+                  <p className="inline-flex items-center gap-2 rounded-full bg-[#f6f9f1] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#71805b]">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Order confirmed
+                  </p>
+                  <DialogHeader className="mt-4 p-0 text-center">
+                    <DialogTitle>Your order is placed</DialogTitle>
+                    <DialogDescription className="mx-auto mt-3 max-w-md text-base leading-7 text-[#5d6750]">
+                      Thank you for shopping with ShopHub. Your order has been saved, your cart is empty, and we&apos;ll
+                      keep the details in your account history.
+                    </DialogDescription>
+                  </DialogHeader>
+                </div>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <SummaryPill label="Order ID" value={placedOrder.id} />
+                  <SummaryPill label="Payment" value={getPaymentMethodLabel(placedOrder.paymentMethod)} />
+                  <SummaryPill label="Total paid" value={formatPrice(placedOrder.total)} />
+                  <SummaryPill label="Status" value={placedOrder.status} />
+                </div>
+
+                <div className="mt-6 rounded-[1.6rem] border border-dashed border-[#dfe6d2] bg-[#f7f9f4] p-4 text-sm leading-7 text-[#556048]">
+                  You can return to the home page now, or later check this order in your account orders page.
+                </div>
+
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="/"
+                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#f4b400] px-6 py-3.5 text-sm font-black text-[#2b2100] transition hover:bg-[#e8aa00]"
+                  >
+                    Go to Home
+                  </Link>
+                  <Link
+                    href="/account/orders"
+                    className="inline-flex flex-1 items-center justify-center rounded-full border border-[#cad2bb] px-6 py-3.5 text-sm font-semibold text-[#263118] transition hover:bg-[#f5f8ef]"
+                  >
+                    View orders
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
@@ -423,4 +491,23 @@ export function CheckoutPage({ user }: { user?: AuthUser }) {
       </div>
     </div>
   );
+}
+
+function SummaryPill({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[1.4rem] border border-[#e4ead8] bg-white px-4 py-3">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#758463]">{label}</p>
+      <p className="mt-2 break-all text-sm font-bold text-[#1b2511]">{value}</p>
+    </div>
+  );
+}
+
+function getPaymentMethodLabel(paymentMethod: StoredOrder["paymentMethod"]) {
+  return paymentMethod === "card"
+    ? "Credit / Debit Card"
+    : paymentMethod === "upi"
+      ? "UPI / Instant Pay"
+      : paymentMethod === "bank"
+        ? "Net Banking"
+        : "Cash on Delivery";
 }
